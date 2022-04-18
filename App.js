@@ -38,9 +38,9 @@ export default function App() {
             tabBarInactiveTintColor: 'gray',
           })}
         >
-          <Tab.Screen name={SCREEN_HOME} component={Home} options={{ title: 'Úvod', headerStyle: { backgroundColor: '#f4511e' } }}>
+          <Tab.Screen name={SCREEN_HOME} component={Home} options={{ title: 'Úvod', headerStyle: { backgroundColor: '#ADD8E6' } }}>
           </Tab.Screen>
-          <Tab.Screen name={SCREEN_SETTINGS} component={Settings} options={{ title: 'Nastavení' } }>
+          <Tab.Screen name={SCREEN_SETTINGS} component={Settings} options={{ title: 'Nastavení', headerStyle: { backgroundColor: '#ADD8E6' } }}>
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
