@@ -45,15 +45,9 @@ function sleep(ms) {
   });
 }
 
-function RemoveItems() {
+// function RemoveItems() {
 
-  useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(`delete * from items;`);
-    });
-  }, []);
-
-}
+// }
 
 function Items({ onPressItem }) {
   const [items, setItems] = useState([]);
@@ -122,6 +116,10 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
+
+      let location = await Location.getLastKnownPositionAsync({});
+      setText(location.coords.latitude.toString() + "," + location.coords.longitude.toString() + "," + location.coords.altitude.toString());
+
       db.transaction(
         (tx) => {
           tx.executeSql("select * from items", [], (_, { rows: { _array } }) =>
@@ -134,14 +132,21 @@ export default function Home() {
     })();
   }, []);
 
-  useEffect(async () => {
+  /*useEffect(async () => {
     if (tracking === "Ukončit tracking") {
       add(text);
       await sleep(Number(time));
       setTracking("Ukončit tracking");
     }
-}, [tracking]);
+}, [tracking]);*/
+
+/*useEffect(() => {
+  setInterval(() => {
+    add(text)
+  }, 20000)
+}, [])*/
   
+
   
   const startStopTracking = async (t) => {
     if (t === "Spustit tracking") {
@@ -151,6 +156,17 @@ export default function Home() {
       setTracking("Spustit tracking");
     }
   }
+
+  const RemoveItems = () => {
+    db.transaction((tx) => {
+      tx.executeSql(`delete from items`);
+      tx.executeSql("select * from items", [], (_, { rows: { _array } }) =>
+      setItems(_array),
+      );
+    },
+    null,
+    forceUpdate);
+  };
 
   const add = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -177,8 +193,7 @@ export default function Home() {
       },
       null,
       forceUpdate
-    );
-
+    )
 
   };
 
@@ -192,8 +207,8 @@ export default function Home() {
     let result = await WebBrowser.openBrowserAsync(link);
     if (result.type === "cancel") {
       console.log("Odesláno");
-      Alert.alert('Data odeslána', 'Data byla odeslána do galerie.', [
-        { text: 'Ok' },
+      Alert.alert('Data odeslána', 'Data byla odeslána do galerie, chcete je odstranit z aplikace?', [
+        { text: 'Ne, nemazat' }, { text: 'Ano, odstranit', onPress: () => RemoveItems(), },
       ]);
     }
   };
@@ -213,7 +228,7 @@ export default function Home() {
         <>
           <View style={styles.row}>
             <Button title="Přidat" style={[styles.button]} onPress={() => {
-              add(text);
+              add();
             }}></Button>
             <Button title="Odeslat" style={[styles.button]} onPress={() => {
               send(url, username, password, time, items);
