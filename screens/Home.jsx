@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   Button,
+  Alert
 } from "react-native";
 import Constants from "expo-constants";
 import * as SQLite from "expo-sqlite";
@@ -42,6 +43,16 @@ function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+function RemoveItems() {
+
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(`delete * from items;`);
+    });
+  }, []);
+
 }
 
 function Items({ onPressItem }) {
@@ -129,7 +140,7 @@ export default function Home() {
       await sleep(Number(time));
       setTracking("Ukončit tracking");
     }
-}, tracking);
+}, [tracking]);
   
   
   const startStopTracking = async (t) => {
@@ -181,6 +192,9 @@ export default function Home() {
     let result = await WebBrowser.openBrowserAsync(link);
     if (result.type === "cancel") {
       console.log("Odesláno");
+      Alert.alert('Data odeslána', 'Data byla odeslána do galerie.', [
+        { text: 'Ok' },
+      ]);
     }
   };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, TextInput, Button, StyleSheet } from 'react-native';
+import { Text, View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useState, useEffect } from "react";
 import SafeAreaView from 'react-native-safe-area-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,6 +33,9 @@ export const Settings = props => {
         await AsyncStorage.setItem(USERNAME_KEY, username)
         await AsyncStorage.setItem(PASSWORD_KEY, password)
         await AsyncStorage.setItem(TIME_KEY, time)
+        Alert.alert('Nastavení uloženo', '', [
+            { text: 'Ok' },
+          ]);
     }
 
     return (
