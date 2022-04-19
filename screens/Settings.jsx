@@ -58,7 +58,7 @@ export const Settings = props => {
                 <TextInput style={[styles.input]} value={time} onChangeText={text => setTime(text)}></TextInput>
             </View>
 
-            <View style={{ width: '40%' }}>
+            <View >
                 <Button title="Upravit" onPress={storeData} />
             </View>
         </View>
